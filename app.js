@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express'); 
 const { exec } = require('child_process');
 const path = require('path');
 const app = express();
@@ -19,6 +19,8 @@ app.get('/', (req, res) => {
         <body>
             <h1>Foldseek 搜索頁面</h1>
             <form action="/search" method="post">
+                <label for="queryFile">查詢文件名（例：example_query.pdb）：</label>
+                <input type="text" id="queryFile" name="queryFile" required>
                 <button type="submit">開始搜索</button>
             </form>
         </body>
@@ -28,13 +30,20 @@ app.get('/', (req, res) => {
 
 // 處理搜索請求
 app.post('/search', (req, res) => {
-    const queryFile = '/data/query/example_query.pdb'; // 容器內查詢文件
-    const databasePath = '/data/database';            // 容器內數據庫路徑
-    const resultPath = '/data/results/result.html';   // 容器內結果文件
-    const tmpPath = '/data/tmp';                      // 容器內臨時文件
+    const { queryFile } = req.body;
+    // 檢查用戶輸入是否合法
+    if (!queryFile || queryFile.trim() === '') {
+        return res.status(400).send('請提供有效的查詢文件名。');
+    }
+
+    // 容器內路徑
+    const queryFilePath = `/data/query/${queryFile}.pdb`; // 用戶輸入的查詢文件
+    const databasePath = '/data/database';                  // 容器內數據庫路徑
+    const resultPath = '/data/results/result.html';         // 容器內結果文件
+    const tmpPath = '/data/tmp';                            // 容器內臨時文件
 
     // 使用 docker exec 執行 Foldseek 指令
-    const command = `docker exec foldseek foldseek easy-search ${queryFile} ${databasePath} ${resultPath} ${tmpPath} --format-mode 3`;
+    const command = `docker exec foldseek foldseek easy-search ${queryFilePath} ${databasePath} ${resultPath} ${tmpPath} --format-mode 3`;
 
     exec(command, (error, stdout, stderr) => {
         if (error) {

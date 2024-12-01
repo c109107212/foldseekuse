@@ -15,7 +15,9 @@ wget -O /data/query/example_query.pdb https://files.rcsb.org/download/1TIM.pdb
 
 ### 簡單搜尋
 foldseek easy-search /data/query/example_query.pdb /data/database /data/results/result.m8 /data/tmp
+foldseek easy-search /data/query/ADAM_0001.pdb /data/database /data/results/result.m8 /data/tmp
 
 ### 搜尋 html
 foldseek easy-search /data/query/example_query.pdb /data/database /data/results/result.html /data/tmp --format-mode 3
+foldseek easy-search /data/query/ADAM_0001.pdb /data/database /data/results/result.html /data/tmp --format-mode 3
 
