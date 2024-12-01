@@ -1,10 +1,11 @@
+version: '3.8'
+
 services:
   foldseek:
-    build: .
-    image: foldseek:latest
     container_name: foldseek
+    build: .
     volumes:
       - ./data:/data
+    working_dir: /data
+    stdin_open: true
     tty: true
-    stdin_open: true      # 開啟標準輸入以支持交互式 Shell
-    command: /bin/bash    # 覆寫啟動命令，進入 Bash Shell
